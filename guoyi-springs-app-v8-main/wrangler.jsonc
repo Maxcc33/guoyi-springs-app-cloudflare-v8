@@ -1,0 +1,6 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "guoyi-springs-app-v8-cloudflare",  // 必须和 Cloudflare Pages 项目名一致，例如 "guoyi-spring-site"
+  "compatibility_date": "2026-02-16",  // 用当前日期或最新日期
+  "pages_build_output_dir": "./"  // 如果你的构建输出在 dist 目录，就写这个；如果是根目录就写 "./"
+}
