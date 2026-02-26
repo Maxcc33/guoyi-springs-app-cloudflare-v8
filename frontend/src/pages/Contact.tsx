@@ -213,7 +213,7 @@ export default function Contact() {
                     {t('微信咨询', 'WeChat Consultation')}
                   </h3>
                   <img
-                    src="/public/images/image (1).png"
+                    src="/images/image (1).png"
                     alt={t('微信二维码', 'WeChat QR Code')}
                     className="w-64 h-64 object-contain mb-4"
                   />
