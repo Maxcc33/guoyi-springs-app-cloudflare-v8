@@ -215,7 +215,7 @@ export default function Contact() {
                   <img
                     src="/images/image (1).png"
                     alt={t('微信二维码', 'WeChat QR Code')}
-                    className="w-64 h-64 object-contain mb-4"
+                    className="w-64 h-64 object-contain mx-auto mb-4"
                   />
                   <p className="text-sm text-secondary">
                     {t('扫描二维码添加微信,获取产品资料和报价', 'Scan QR code to add WeChat for product information and quotation')}
