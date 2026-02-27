@@ -181,7 +181,7 @@ export default function Contact() {
                 <Card className="border-none shadow-lg overflow-hidden">
                   <div className="aspect-video bg-gray-100">
                     <iframe
-                      src="https://uri.amap.com/marker?position=121.3765,28.5821&name=台州市路桥国益弹簧制造有限公司&src=guoyi-springs"
+                      src="https://restapi.amap.com/v3/staticmap?location=121.3765,28.5821&zoom=15&size=750*400&markers=mid,,A:121.3765,28.5821&key=22cb293952632b6d56f946abf01f8d73"
                       width="100%"
                       height="100%"
                       style={{ border: 0 }}
