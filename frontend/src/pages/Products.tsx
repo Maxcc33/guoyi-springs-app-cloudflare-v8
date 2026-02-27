@@ -48,7 +48,7 @@ export default function Products() {
       id: 'torsion',
       name: t('扭簧系列', 'Torsion Springs'),
       description: t('承受扭转力矩的螺旋弹簧,用于需要旋转或扭转力的应用', 'Helical springs that resist twisting or rotational forces'),
-      image: 'https://mgx-backend-cdn.metadl.com/generate/images/950291/2026-02-03/48d7dcab-6f1e-4e70-b52c-218ee13cb2cc.png',
+      image: "/images/48d7dcab-6f1e-4e70-b52c-218ee13cb2cc.png",
       specs: [
         t('线径范围: 0.2-8mm', 'Wire Diameter: 0.2-8mm'),
         t('外径范围: 3-60mm', 'Outer Diameter: 3-60mm'),
