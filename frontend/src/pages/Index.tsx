@@ -80,7 +80,7 @@ export default function Index() {
     },
     {
       name: t('不锈钢扭簧', 'Torsion Springs'),
-      image: 'https://mgx-backend-cdn.metadl.com/generate/images/950291/2026-02-03/48d7dcab-6f1e-4e70-b52c-218ee13cb2cc.png',
+      image: "/images/48d7dcab-6f1e-4e70-b52c-218ee13cb2cc.png",
       specs: t('线径: 0.2-8mm | 材质: 304/316', 'Wire Dia: 0.2-8mm | Material: 304/316'),
     },
     {
