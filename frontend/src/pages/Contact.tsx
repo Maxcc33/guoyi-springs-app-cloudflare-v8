@@ -18,14 +18,48 @@ export default function Contact() {
     message: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast({
-      title: t('提交成功', 'Submitted Successfully'),
-      description: t('我们将尽快与您联系!', 'We will contact you soon!'),
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   toast({
+  //     title: t('提交成功', 'Submitted Successfully'),
+  //     description: t('我们将尽快与您联系!', 'We will contact you soon!'),
+  //   });
+  //   setFormData({ name: '', phone: '', email: '', message: '' });
+  // };
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  
+  try {
+    const response = await fetch('/api/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
     });
-    setFormData({ name: '', phone: '', email: '', message: '' });
-  };
+    
+    const result = await response.json();
+    
+    if (response.ok) {
+      toast({
+        title: t('提交成功', 'Submitted Successfully'),
+        description: t('我们将尽快与您联系!', 'We will contact you soon!'),
+      });
+      setFormData({ name: '', phone: '', email: '', message: '' });
+    } else {
+      toast({
+        title: t('提交失败', 'Submission Failed'),
+        description: result.error || t('请稍后重试', 'Please try again later'),
+        variant: 'destructive',
+      });
+    }
+  } catch (error) {
+    toast({
+      title: t('网络错误', 'Network Error'),
+      description: t('请检查网络连接后重试', 'Please check your network and try again'),
+      variant: 'destructive',
+    });
+  }
+};
+
 
   const contactInfo = [
     {
