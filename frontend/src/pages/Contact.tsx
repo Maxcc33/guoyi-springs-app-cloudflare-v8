@@ -39,10 +39,11 @@ export default function Contact() {
     const result = await response.json();
     
     if (response.ok) {
-      toast({
-        title: t('提交成功', 'Submitted Successfully'),
-        description: t('我们将尽快与您联系!', 'We will contact you soon!'),
-      });
+      // toast({
+      //   title: t('提交成功', 'Submitted Successfully'),
+      //   description: t('我们将尽快与您联系!', 'We will contact you soon!'),
+      // });
+      alert("提交成功！我们将尽快与您联系！");
       setFormData({ name: '', phone: '', email: '', message: '' });
     } else {
       toast({
