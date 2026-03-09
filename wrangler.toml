@@ -1,8 +1,9 @@
 name = "guoyi-messages"  
-compatibility_date = "2026-03-06"
+compatibility_date = "2026-03-09"
 
 [[d1_databases]]
 binding = "DB"  
 database_name = "guoyi-messages"  
 
 database_id = "a5482efb-0aea-4f9a-bfe5-152e2b408716"  
+
