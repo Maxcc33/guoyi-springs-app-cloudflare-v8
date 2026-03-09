@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS messages (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  email TEXT DEFAULT '',
+  message TEXT NOT NULL,
+  created_at TEXT NOT NULL
+);
