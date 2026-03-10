@@ -39,7 +39,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const resend = new Resend(context.env.RESEND_API_KEY);
 
     const sendResult = await resend.emails.send({
-      from: '网站通知 <no-reply@你的域名.com>',   // ← 改成你已验证的域名！不能用 @gmail.com
+      from: 'guoyisprings.com 通知 <notify@guoyisprings.com>',   // ← 改成你已验证的域名！不能用 @gmail.com
       to: ['1926375372cgy@gmail.com'],
       subject: `新留言 - 来自 ${body.name}`,
       html: `
