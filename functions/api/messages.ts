@@ -12,7 +12,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       message: string;
     };
 
-    // 必填校验（可按需加强，例如 phone 格式、email 合法性）
+    // 必填校验（可按需加强，例如 phone 格式、email 合法性。）
     if (!body.name?.trim() || !body.phone?.trim() || !body.message?.trim()) {
       return new Response(
         JSON.stringify({ error: '姓名、电话和留言内容为必填项' }),
@@ -96,3 +96,4 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     );
   }
 };
+
