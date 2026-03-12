@@ -123,8 +123,8 @@ export const newsData: NewsItem[] = [
   {
     id: '4',
     title: {
-      zh: '不锈钢弹簧在医疗器械领域的应用案例分享',
-      en: 'Application Cases of Stainless Steel Springs in Medical Device Field',
+      zh: '不锈钢弹簧在医疗器械中的应用：316不锈钢弹簧的优势与典型案例',
+      en: 'Applications of Stainless Steel Springs in Medical Devices: Advantages and Typical Cases of 316 Stainless Steel Springs',
     },
     date: '2024-08-25',
     category: {
@@ -138,16 +138,19 @@ export const newsData: NewsItem[] = [
     },
     content: {
       zh: [
-        '不锈钢弹簧因其优异的耐腐蚀性、生物相容性和机械性能，在医疗器械领域有着广泛的应用。本文将详细介绍不锈钢弹簧在医疗器械中的典型应用案例。',
-        '一、手术器械中的应用\n手术剪、止血钳、持针器等手术器械中大量使用不锈钢弹簧。这些弹簧需要具备优异的弹性恢复能力和耐疲劳性能，确保器械在反复使用后仍能保持良好的操作手感。316不锈钢因其更好的耐腐蚀性，是手术器械弹簧的首选材料。',
-        '二、注射器和输液设备\n一次性注射器的推杆复位弹簧、输液泵的控制弹簧等都采用不锈钢材质。这些弹簧需要满足严格的生物相容性要求，确保不会对人体产生不良影响。',
-        '三、医疗床和康复设备\n电动医疗床的升降机构、康复训练设备的阻力调节装置等都需要高强度、长寿命的不锈钢弹簧。这些弹簧需要承受频繁的负载变化，对疲劳寿命有很高的要求。',
-        '四、植入式医疗器械\n心脏支架、骨科植入物等植入式医疗器械中也使用不锈钢弹簧。这类应用对材料的生物相容性、耐腐蚀性和机械性能有着最为严格的要求。',
+        '不锈钢弹簧凭借优异的耐腐蚀性、生物相容性和高疲劳寿命，已成为医疗器械领域不可或缺的核心组件。特别是在需要反复使用、灭菌处理或接触体液的环境中，316不锈钢弹簧（或316L）因其更高的抗点蚀能力和氯离子耐受性，成为主流选择。本文将详细分析不锈钢弹簧在医疗器械中的典型应用场景，帮助工程师和采购人员更好地选型。',
+        '一、手术器械中的不锈钢弹簧应用\n手术剪、止血钳、持针器、缝合器等精密手术器械中，大量采用不锈钢弹簧（主要是压缩簧、扭簧或拉簧）。这些弹簧负责提供弹性复位、夹持力和操作反馈，必须在数万次开合后仍保持稳定手感和零失效。',
+        '为什么首选316不锈钢？\n-优异的耐腐蚀性：手术环境常涉及生理盐水、血液和高压蒸汽灭菌，316不锈钢的钼（Mo）元素显著提升抗点蚀能力（PREN值约24-26）。\n-生物相容性高：符合ISO 10993标准，不易释放有害离子。\n-疲劳寿命长：冷加工后强度可达1300-1800 MPa，适合高频使用。\n实际案例：许多高端手术器械供应商使用316不锈钢弹簧确保器械在反复灭菌后仍可靠，减少维护成本。'
+        '二、注射器与输液设备中的不锈钢弹簧\n一次性注射器、安全针回缩机制、胰岛素笔、输液泵的压力调节簧和控制簧等，都依赖不锈钢弹簧实现精确剂量控制和可靠复位。这些弹簧需满足严格的生物相容性和清洁度要求，避免污染药物或人体。\n关键材料选择：\n-316不锈钢弹簧是主流选项，因其低磁性（适合MRI兼容设备）、易清洁和耐氯离子腐蚀。\n-线径通常在0.1-1.0mm范围，支持微型化设计。\n这类应用强调无菌和一次性，不锈钢弹簧的耐疲劳性能确保推杆或阀门在多次激活后不失效。',
+        '三、医疗床与康复设备中的不锈钢弹簧\n电动医疗床的升降机构、侧护栏调节、康复训练器的阻力调节装置和患者抬升系统，常使用高强度不锈钢弹簧（压缩簧或恒力簧）。这些弹簧需承受频繁负载变化（数万至数十万次循环），并保持长期稳定性。\n材料优势：\n-316不锈钢或17-7PH（高强度型）提供优秀疲劳寿命和耐腐蚀性。\n-支持大负载：强度高、体积小，适合空间受限的设计。\n实际场景：医院电动床和轮椅辅助装置中，不锈钢弹簧确保安全升降，减少机械故障风险。',
+        '四、植入式医疗器械中的不锈钢弹簧应用\n心脏瓣膜辅助装置、某些骨科固定器、神经刺激器接触簧或血管支架的自膨胀机制等植入式设备，也会涉及微型不锈钢弹簧。这类应用对材料的生物相容性、耐腐蚀性和疲劳性能要求最高。\n首选材料：\n-316LVM（真空熔炼316L）或316L，符合ASTM F138/F139标准。\n-低碳设计减少敏化风险，确保长期植入安全。\n注意：植入级不锈钢弹簧需通过严格的FDA/NMPA注册和生物相容性测试。',
+        '不锈钢弹簧在医疗器械中的选材建议\n-腐蚀/灭菌环境优先：首选316不锈钢弹簧（或316L），耐氯离子和酸性介质。\n-高疲劳/高强度需求：考虑17-7PH不锈钢，强度可提升50%以上。\n-微型/精密要求：线径0.1-2.0mm，支持定制公差±0.01mm。\n-认证参考：优先符合ISO 13485、ISO 10993、ASTM A313标准的材料。'
+        '不锈钢弹簧在医疗器械领域的应用正随着微创技术和智能设备的发展而不断扩展。如果你正在设计或采购医疗级弹簧，建议结合具体工况（如温度、介质、循环次数）进行疲劳测试和盐雾验证，以确保长期可靠性。'
         '国益弹簧专注于医疗级不锈钢弹簧的研发和生产，产品已通过多项医疗器械相关认证，为众多医疗器械企业提供可靠的弹簧解决方案。',
       ],
       en: [
-        'Stainless steel springs are widely used in the medical device field due to their excellent corrosion resistance, biocompatibility, and mechanical properties. This article will introduce typical application cases of stainless steel springs in medical devices.',
-        'I. Applications in Surgical Instruments\nStainless steel springs are extensively used in surgical scissors, hemostatic forceps, needle holders, and other surgical instruments. These springs need to have excellent elastic recovery and fatigue resistance to ensure that the instruments maintain good operational feel after repeated use. 316 stainless steel is the preferred material for surgical instrument springs due to its better corrosion resistance.',
+        'Stainless steel springs, with their excellent corrosion resistance, biocompatibility, and long fatigue life, have become an indispensable core component in the medical device field. Especially in environments requiring repeated use, sterilization, or contact with bodily fluids, 316 stainless steel springs (or 316L) are the mainstream choice due to their superior resistance to pitting corrosion and chloride ion tolerance. This article will analyze in detail the typical application scenarios of stainless steel springs in medical devices to help engineers and purchasing personnel make better selections.,
+        'I. Application of stainless steel springs in surgical instruments\nStainless steel springs (mainly compression springs, torsion springs, or tension springs) are widely used in precision surgical instruments such as surgical scissors, hemostatic forceps, needle holders, and suture devices. These springs are responsible for providing elastic reset, clamping force, and operational feedback, and must maintain a stable feel and zero failure rate after tens of thousands of opening and closing cycles.',
         'II. Syringes and Infusion Equipment\nThe plunger return springs of disposable syringes and control springs of infusion pumps are made of stainless steel. These springs need to meet strict biocompatibility requirements to ensure no adverse effects on the human body.',
         'III. Medical Beds and Rehabilitation Equipment\nThe lifting mechanisms of electric medical beds and resistance adjustment devices of rehabilitation training equipment all require high-strength, long-life stainless steel springs. These springs need to withstand frequent load changes and have high requirements for fatigue life.',
         'IV. Implantable Medical Devices\nStainless steel springs are also used in implantable medical devices such as cardiac stents and orthopedic implants. This type of application has the most stringent requirements for material biocompatibility, corrosion resistance, and mechanical properties.',
