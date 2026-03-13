@@ -263,4 +263,37 @@ export const newsData: NewsItem[] = [
       ],
     },
   },
+  {
+    id: '7',
+    title: {
+      zh: '弹簧热处理工艺对疲劳寿命的影响 | 不锈钢弹簧应力消除退火与喷丸强化指南',
+      en: 'Impact of Spring Heat Treatment Processes on Fatigue Life | Guide to Stress Relief Annealing and Shot Peening for Stainless Steel Springs'
+    },
+    date: '2026-03-13',
+    category: {
+      zh: '技术文章',
+      en: 'Technical Article'
+    },
+    image: 'https://guoyisprings.com/images/spring-heat-treatment-fatigue.jpg',  // 请替换为实际图片URL（建议放退火炉或喷丸设备+疲劳断口对比图）
+    summary: {
+      zh: '不锈钢弹簧热处理工艺（应力消除退火、17-7PH时效、喷丸强化）对疲劳寿命的影响详解，结合GB/T 4357标准，提供国内工厂实用工艺参数与寿命提升数据。',
+      en: 'Detailed explanation of how heat treatment processes (stress relief annealing, 17-7PH aging, shot peening) affect fatigue life of stainless steel springs, with GB/T 4357 standard parameters and real life improvement data for Chinese factories.'
+    },
+    content: {
+      zh: [
+        '不锈钢弹簧在卷制成型后，残余应力会显著影响疲劳寿命。正确的热处理工艺（如应力消除退火、时效硬化及喷丸强化）能有效消除有害拉应力、引入有益压应力，从而大幅提升弹簧的循环次数。本文结合GB/T 4357-2019《冷拉不锈钢丝》和行业实践，详细说明不锈钢弹簧热处理工艺对疲劳寿命的具体影响。',
+        '不锈钢弹簧（主要06Cr19Ni10/304、06Cr17Ni12Mo2/316、0Cr17Ni7Al/17-7PH）属于冷成形产品，热处理以“低温去应力”为主。应力消除退火：卷制后200-400℃保温1-2小时；17-7PH沉淀硬化时效：固溶后480-570℃时效；喷丸强化：热处理后采用钢丸冲击，覆盖率≥90%。',
+        '残余应力是疲劳断裂的首要诱因。应力消除退火可消除拉应力，疲劳寿命提升20%-50%；17-7PH时效硬化使强度提升至1600MPa以上，寿命可提升2-3倍；喷丸强化引入表面压应力，寿命提升30%-100%甚至更高，国内汽车悬架弹簧案例已验证百万次循环。',
+        '工艺参数对比表：应力消除退火（200-400℃/1-2h，提升20-50%）；17-7PH时效（480-570℃，提升2-3倍）；喷丸强化（压应力-400~-800MPa，提升30-100%+）。普通工业弹簧优先退火+喷丸，高强度弹簧推荐17-7PH全流程。',
+        '正确热处理工艺能让不锈钢弹簧疲劳寿命提升1-3倍，是控制成本、提升品质的关键。建议结合具体工况进行盐雾和疲劳台架验证，确保符合GB标准要求。'
+      ],
+      en: [
+        'Residual stress after cold coiling significantly affects the fatigue life of stainless steel springs. Proper heat treatment processes (stress relief annealing, aging hardening, and shot peening) effectively eliminate harmful tensile stress and introduce beneficial compressive stress, greatly increasing cycle life. This article explains the impact based on GB/T 4357-2019 and domestic practices.',
+        'Stainless steel springs (mainly 06Cr19Ni10/304, 06Cr17Ni12Mo2/316, 0Cr17Ni7Al/17-7PH) are cold-formed. Main treatments: stress relief annealing at 200-400°C for 1-2 hours; 17-7PH precipitation hardening aging at 480-570°C; shot peening after heat treatment with ≥90% coverage.',
+        'Residual stress is the primary cause of fatigue failure. Stress relief annealing increases fatigue life by 20%-50%; 17-7PH aging raises strength above 1600 MPa and life by 2-3 times; shot peening introduces -400 to -800 MPa compressive stress, boosting life by 30%-100% or more (verified in Chinese automotive suspension spring cases up to 1 million cycles).',
+        'Process comparison table: Stress relief (200-400°C/1-2h, +20-50%); 17-7PH aging (+2-3×); Shot peening (compressive stress -400~-800 MPa, +30-100%+). For general industrial springs: annealing + peening; for high-strength: full 17-7PH process.',
+        'Proper heat treatment can increase stainless steel spring fatigue life by 1-3 times and is key to cost control and quality improvement. Recommend salt spray and fatigue bench testing per GB standards for specific working conditions.'
+      ]
+    }
+  }
 ];
