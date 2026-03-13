@@ -227,10 +227,6 @@ export const newsData: NewsItem[] = [
         '5. Selection Recommendations: Quick Decision Guide\n- Indoor/general industrial/appliance return springs: Prioritize 304 for best value.\n- Marine/salt spray/chemical/food/outdoor auto parts: Strongly recommend 316 for superior durability.\n- Medical devices/syringes/surgical tools/implants: Prefer 316L (low-carbon) for better biocompatibility (ISO 10993/ASTM F138).\n- High-temperature needs: 316 is more stable.\nTip: Validate with fatigue/salt spray tests based on medium, temp, cycles, load. Both grades available in 0.2-12mm wire.',
       ],
     },
-  }
-如果需要调整日期、id、image URL或进一步细化，直接告诉我！1.8秒快速模式
-      ],
-    },
   },
   {
     id: '6',
