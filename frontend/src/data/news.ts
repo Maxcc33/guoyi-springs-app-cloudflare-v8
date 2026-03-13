@@ -128,7 +128,7 @@ export const newsData: NewsItem[] = [
     },
     date: '2024-08-25',
     category: {
-      zh: '行业资讯',
+      zh: '技术文章',
       en: 'Industry News',
     },
     image: 'https://mgx-backend-cdn.metadl.com/generate/images/950291/2026-02-03/d31cc2d7-7d1d-45cb-afcc-16807cfc5305.png',
