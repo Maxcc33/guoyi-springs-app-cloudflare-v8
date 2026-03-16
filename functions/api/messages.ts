@@ -114,7 +114,6 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
-};
     
     return new Response(
       JSON.stringify({ success: true, message: '留言提交成功，已收到通知' }),
