@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { MapPin, Phone, Mail, Clock, MessageSquare } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageContext';
 import { useToast } from '@/hooks/use-toast';
+import { MapPin, Phone, Mail, Clock, MessageSquare, Loader2 } from 'lucide-react';
 
 export default function Contact() {
   const { t } = useLanguage();
@@ -198,9 +199,23 @@ export default function Contact() {
                       />
                     </div>
 
-                    <Button type="submit" size="lg" className="w-full bg-primary hover:bg-primary-hover">
-                      <MessageSquare className="mr-2 w-5 h-5" />
-                      {t('提交留言', 'Submit Message')}
+                    <Button
+                      type="submit"
+                      size="lg"
+                      className="w-full bg-primary hover:bg-primary-hover"
+                      disabled={isSubmitting}  // 关键：禁用按钮，防止重复点击
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />  // 旋转 loading 图标
+                          {t('提交中...', 'Submitting...')}
+                        </>
+                      ) : (
+                        <>
+                          <MessageSquare className="mr-2 w-5 h-5" />
+                          {t('提交留言', 'Submit Message')}
+                        </>
+                      )}
                     </Button>
                   </form>
                 </CardContent>
