@@ -67,6 +67,55 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       // 可选：你可以在生产环境接上 Cloudflare Logpush 或 Sentry 监控
     }
 
+    const webhookUrl = context.env.WECHAT_WEBHOOK_URL;
+
+    if (webhookUrl) {
+      const wechatContent = `**网站新留言通知**  
+      ━━━━━━━━━━━━━━  
+      **姓名**：${body.name.trim()}  
+      **电话**：${body.phone.trim()}  
+      ${body.email ? `**邮箱**：${body.email.trim()}\n` : ''}
+      **留言内容**：  
+      > ${body.message.trim().replace(/\n/g, '\n> ')}
+      
+      **提交时间**：${new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })}`;
+
+      try {
+        const wechatRes = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            msgtype: 'markdown',
+            markdown: {
+              content: wechatContent
+            }
+          })
+        });
+
+        if (!wechatRes.ok) {
+          const errorText = await wechatRes.text();
+          console.error('微信推送失败:', wechatRes.status, errorText);
+        }
+      } catch (wechatErr) {
+        console.error('微信推送异常:', wechatErr);
+      }
+    } else {
+      console.warn('缺少 WECHAT_WEBHOOK_URL 环境变量，跳过微信推送');
+    }
+
+    return new Response(
+      JSON.stringify({ success: true, message: '留言提交成功，已收到通知' }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
+    );
+  } catch (error) {
+    console.error('处理失败:', error);
+    return new Response(
+      JSON.stringify({ error: '服务器错误，请稍后重试' }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+};
+    
     return new Response(
       JSON.stringify({ success: true, message: '留言提交成功，已收到通知' }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
