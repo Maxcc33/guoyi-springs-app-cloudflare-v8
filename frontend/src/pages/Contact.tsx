@@ -207,7 +207,7 @@ export default function Contact() {
                     >
                       {isSubmitting ? (
                         <>
-                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />  // 旋转 loading 图标
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                           {t('提交中...', 'Submitting...')}
                         </>
                       ) : (
