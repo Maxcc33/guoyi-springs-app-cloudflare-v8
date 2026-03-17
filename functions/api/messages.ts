@@ -48,6 +48,30 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       );
     }
 
+    //D1 手机号/邮箱限流
+    const recentCheck = await context.env.DB.prepare(`
+      SELECT 
+        (SELECT COUNT(*) FROM messages 
+         WHERE phone = ? AND created_at > datetime('now', '-5 minutes')) as phone_count,
+        (SELECT COUNT(*) FROM messages 
+         WHERE email = ? AND email != '' AND created_at > datetime('now', '-5 minutes')) as email_count
+    `)
+      .bind(body.phone.trim(), body.email?.trim() || '')
+      .first<{ phone_count: number; email_count: number }>();
+  
+    const phoneCount = recentCheck?.phone_count ?? 0;
+    const emailCount = recentCheck?.email_count ?? 0;
+  
+    if (phoneCount >= 3 || emailCount >= 3) {
+      const message = phoneCount >= 3 
+        ? '该手机号提交过于频繁，请5分钟后再试'
+        : '该邮箱提交过于频繁，请5分钟后再试';
+      return new Response(
+        JSON.stringify({ error: message }),
+        { status: 429, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+    
     //写入 D1 数据库
     await context.env.DB.prepare(
       'INSERT INTO messages (name, phone, email, message, created_at) VALUES (?, ?, ?, ?, datetime("now"))'
