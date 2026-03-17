@@ -7,6 +7,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       message: string;
     };
 
+    //基础必填校验
     if (!body.name?.trim() || !body.phone?.trim() || !body.message?.trim()) {
       return new Response(
         JSON.stringify({ error: '姓名、电话和留言内容为必填项' }),
@@ -14,6 +15,23 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       );
     }
 
+    //KV限流防重逻辑开始
+    const ip = context.request.headers.get('CF-Connecting-IP') || 'unknown';
+    const contentHash = await generateHash(body.message, body.name);
+
+    // 构造唯一的 Key: 包含 IP、电话和内容哈希
+    const limitKey = `limit:${ip}:${body.phone.trim()}:${contentHash}`;
+
+    // 检查 KV 中是否存在该 Key
+    const isRateLimited = await context.env.KV.get(limitKey);
+    if (isRateLimited) {
+      return new Response(
+        JSON.stringify({ error: '请勿重复提交，60秒后再试' }),
+        { status: 429, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    //写入 D1 数据库
     await context.env.DB.prepare(
       'INSERT INTO messages (name, phone, email, message, created_at) VALUES (?, ?, ?, ?, datetime("now"))'
     )
@@ -25,6 +43,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       )
       .run();
 
+    //发送邮件 (Resend)
     const { Resend } = await import('resend');
     const resend = new Resend(context.env.RESEND_API_KEY);
     const sendResult = await resend.emails.send({
@@ -53,17 +72,18 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       console.error('Resend 发送失败:', sendResult.error);
     }
 
+    //微信推送
     const webhookUrl = context.env.WECHAT_WEBHOOK_URL;
     if (webhookUrl) {
       const wechatContent = `**网站新留言通知**
-━━━━━━━━━━━━━━
-**姓名**：${body.name.trim()}
-**电话**：${body.phone.trim()}
-${body.email ? `**邮箱**：${body.email.trim()}\n` : ''}
-**留言内容**：
-> ${body.message.trim().replace(/\n/g, '\n> ')}
-
-**提交时间**：${new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })}`;
+      ━━━━━━━━━━━━━━
+      **姓名**：${body.name.trim()}
+      **电话**：${body.phone.trim()}
+      ${body.email ? `**邮箱**：${body.email.trim()}\n` : ''}
+      **留言内容**：
+      > ${body.message.trim().replace(/\n/g, '\n> ')}
+      
+      **提交时间**：${new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })}`;
 
       try {
         const wechatRes = await fetch(webhookUrl, {
@@ -87,6 +107,10 @@ ${body.email ? `**邮箱**：${body.email.trim()}\n` : ''}
       console.warn('缺少 WECHAT_WEBHOOK_URL 环境变量，跳过微信推送');
     }
 
+    // === 成功后记录 KV，有效期 60 秒 ===
+    await context.env.KV.put(limitKey, 'true', { expirationTtl: 60 });
+    
+    //成功or失败弹窗通知
     return new Response(
       JSON.stringify({ success: true, message: '留言提交成功，已收到通知' }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
