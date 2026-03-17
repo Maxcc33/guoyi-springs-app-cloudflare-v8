@@ -1,10 +1,16 @@
-import { createHash } from 'crypto';
-
 interface Env {
   DB: D1Database;
   'form-submit-limit': KVNamespace; 
   RESEND_API_KEY: string;
   WECHAT_WEBHOOK_URL: string;
+}
+
+// 2. 新增一个使用 Web Crypto 的哈希函数
+async function getHash(text: string) {
+  const msgUint8 = new TextEncoder().encode(text);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 32);
 }
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
@@ -28,9 +34,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const ip = context.request.headers.get('CF-Connecting-IP') || 'unknown';
 
     // 计算内容哈希（使用 crypto）
-    const contentHash = createHash('md5')
-      .update(body.message.trim() + (body.name?.trim() || ''))
-      .digest('hex');
+    const contentHash = await getHash(body.message.trim() + (body.name?.trim() || ''));
     
     // 构造唯一的 Key: 包含 IP、电话和内容哈希
     const limitKey = `limit:${ip}:${body.phone.trim()}:${contentHash}`;
