@@ -1,3 +1,10 @@
+interface Env {
+  DB: D1Database;
+  'form-submit-limit': KVNamespace; 
+  RESEND_API_KEY: string;
+  WECHAT_WEBHOOK_URL: string;
+}
+
 export const onRequestPost: PagesFunction<Env> = async (context) => {
   try {
     const body = await context.request.json() as {
@@ -23,7 +30,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const limitKey = `limit:${ip}:${body.phone.trim()}:${contentHash}`;
 
     // 检查 KV 中是否存在该 Key
-    const isRateLimited = await context.env.KV.get(limitKey);
+    const isRateLimited = await context.env['form-submit-limit'].get(limitKey);
     if (isRateLimited) {
       return new Response(
         JSON.stringify({ error: '请勿重复提交，60秒后再试' }),
@@ -108,7 +115,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     }
 
     // === 成功后记录 KV，有效期 60 秒 ===
-    await context.env.KV.put(limitKey, 'true', { expirationTtl: 60 });
+    await context.env['form-submit-limit'].put(limitKey, 'true', { expirationTtl: 60 });
     
     //成功or失败弹窗通知
     return new Response(
