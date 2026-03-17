@@ -1,3 +1,5 @@
+import { createHash } from 'crypto';
+
 interface Env {
   DB: D1Database;
   'form-submit-limit': KVNamespace; 
@@ -24,8 +26,12 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
     //KV限流防重逻辑开始
     const ip = context.request.headers.get('CF-Connecting-IP') || 'unknown';
-    const contentHash = await generateHash(body.message, body.name);
 
+    // 计算内容哈希（使用 crypto）
+    const contentHash = createHash('md5')
+      .update(body.message.trim() + (body.name?.trim() || ''))
+      .digest('hex');
+    
     // 构造唯一的 Key: 包含 IP、电话和内容哈希
     const limitKey = `limit:${ip}:${body.phone.trim()}:${contentHash}`;
 
