@@ -37,6 +37,17 @@ export default function Contact() {
         body: JSON.stringify(formData),
       });
 
+      if (response.status === 429) {
+        const data = await response.json();
+        toast({
+          title: t('提交过于频繁', 'Too Frequent'),
+          description: data.error || t('请稍后再试', 'Please try again later'),
+          variant: 'destructive',
+        });
+        setIsSubmitting(false);
+        return;
+      }
+      
       const result = await response.json();
 
       if (response.ok) {
