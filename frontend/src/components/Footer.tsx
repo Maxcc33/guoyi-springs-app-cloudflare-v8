@@ -88,7 +88,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
           <p>
-            © 2024 {t('台州市路桥国益弹簧制造有限公司', 'Taizhou Guoyi Spring Manufacturing Co., Ltd.')} | {t('版权所有', 'All Rights Reserved')}
+            © 2024 {t('台州市路桥国益弹簧制造有限公司', 'Taizhou Guoyi Spring Manufacturing Co., Ltd.')} | {t('版权所有 浙ICP备2026019686号', 'All Rights Reserved 浙ICP备2026019686号')}
           </p>
         </div>
       </div>
