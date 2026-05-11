@@ -3,7 +3,7 @@
 export interface AdminEnv {
   DB: D1Database;
   R2: R2Bucket;
-  JWT_SECRET: string;
+  ADMIN_JWT_SECRET: string;
   R2_PUBLIC_URL: string;
 }
 
@@ -49,7 +49,7 @@ export async function requireAdmin(request: Request, env: AdminEnv): Promise<{ i
   const auth = request.headers.get('Authorization');
   if (!auth?.startsWith('Bearer ')) return null;
   const token = auth.slice(7);
-  return verifyToken(token, env.JWT_SECRET);
+  return verifyToken(token, env.ADMIN_JWT_SECRET);
 }
 
 // CORS 头

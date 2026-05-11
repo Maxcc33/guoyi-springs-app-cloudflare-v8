@@ -8,7 +8,7 @@ export const onRequestPost: PagesFunction<AdminEnv> = async (context) => {
   const { request, env } = context;
   try {
     // 检查必要的环境变量
-    if (!env.JWT_SECRET) {
+    if (!env.ADMIN_JWT_SECRET) {
       console.error('ADMIN_JWT_SECRET 环境变量未设置');
       return jsonResponse({ error: 'JWT_SECRET 未配置', detail: 'ADMIN_JWT_SECRET environment variable is missing' }, 500, request);
     }
@@ -46,7 +46,7 @@ export const onRequestPost: PagesFunction<AdminEnv> = async (context) => {
         .bind(newHash, admin.id).run();
     }
 
-    const token = await createToken({ id: admin.id, username: admin.username }, env.JWT_SECRET);
+    const token = await createToken({ id: admin.id, username: admin.username }, env.ADMIN_JWT_SECRET);
     return jsonResponse({ token, username: admin.username }, 200, request);
   } catch (e: unknown) {
     const errMsg = e instanceof Error ? e.message : String(e);
