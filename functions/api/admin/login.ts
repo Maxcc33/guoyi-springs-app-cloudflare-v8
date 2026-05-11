@@ -1,4 +1,4 @@
-import { createToken, hashPassword, corsHeaders, jsonResponse, AdminEnv } from '../../_shared/auth';
+import { createToken, verifyPassword, hashPassword, corsHeaders, jsonResponse, AdminEnv } from '../../_shared/auth';
 
 export const onRequestOptions: PagesFunction<AdminEnv> = async ({ request }) => {
   return new Response(null, { status: 204, headers: corsHeaders(request) });
@@ -20,24 +20,17 @@ export const onRequestPost: PagesFunction<AdminEnv> = async (context) => {
       return jsonResponse({ error: '用户名或密码错误' }, 401, request);
     }
 
-    // 支持初始 bcrypt hash（admin123）和 SHA-256 hash
-    let passwordOk = false;
-    const inputHash = await hashPassword(password);
-
-    if (admin.password_hash.startsWith('$2a$')) {
-      // 初始 bcrypt hash，只接受默认密码 admin123
-      passwordOk = password === 'admin123';
-      if (passwordOk) {
-        // 自动升级为 SHA-256 hash
-        await env.DB.prepare('UPDATE admins SET password_hash = ? WHERE id = ?')
-          .bind(inputHash, admin.id).run();
-      }
-    } else {
-      passwordOk = inputHash === admin.password_hash;
-    }
+    const passwordOk = await verifyPassword(password, admin.password_hash);
 
     if (!passwordOk) {
       return jsonResponse({ error: '用户名或密码错误' }, 401, request);
+    }
+
+    // 如果是旧的 bcrypt hash，自动升级为 SHA-256
+    if (admin.password_hash.startsWith('$2a$')) {
+      const newHash = await hashPassword(password);
+      await env.DB.prepare('UPDATE admins SET password_hash = ? WHERE id = ?')
+        .bind(newHash, admin.id).run();
     }
 
     const token = await createToken({ id: admin.id, username: admin.username }, env.JWT_SECRET);

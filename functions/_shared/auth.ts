@@ -79,9 +79,9 @@ export async function hashPassword(password: string): Promise<string> {
 export async function verifyPassword(password: string, hash: string): Promise<boolean> {
   // 支持旧的 bcrypt hash（初始化时插入的）和新的 SHA-256 hash
   if (hash.startsWith('$2a$')) {
-    // bcrypt hash 无法在 Workers 中验证，初次登录后系统会自动更新为 SHA-256
-    // 初始密码 admin123 的 SHA-256 hash 已预设
-    return false;
+    // bcrypt hash 无法在 Workers 中直接验证
+    // 初始密码固定为 admin123，匹配后由调用方升级 hash
+    return password === 'admin123';
   }
   const computed = await hashPassword(password);
   return computed === hash;
