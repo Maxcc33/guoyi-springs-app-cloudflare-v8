@@ -5,7 +5,29 @@ interface Env {
   WECHAT_WEBHOOK_URL: string;
 }
 
-// 2. 新增一个使用 Web Crypto 的哈希函数
+// 允许跨域访问的域名列表
+const ALLOWED_ORIGINS = [
+  'https://guoyisprings.com',
+  'https://www.guoyisprings.com',
+  'https://guoyisprings.cn',
+  'https://www.guoyisprings.cn',
+];
+
+// 根据请求来源动态返回 CORS 响应头
+function getCorsHeaders(request: Request): Record<string, string> {
+  const origin = request.headers.get('Origin') || '';
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : 'https://guoyisprings.com';
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Max-Age': '86400',
+  };
+}
+
+// 使用 Web Crypto 的哈希函数
 async function getHash(text: string) {
   const msgUint8 = new TextEncoder().encode(text);
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
@@ -13,7 +35,17 @@ async function getHash(text: string) {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 32);
 }
 
+// 处理 OPTIONS 预检请求（浏览器跨域时会先发送此请求）
+export const onRequestOptions: PagesFunction<Env> = async (context) => {
+  return new Response(null, {
+    status: 204,
+    headers: getCorsHeaders(context.request),
+  });
+};
+
 export const onRequestPost: PagesFunction<Env> = async (context) => {
+  const corsHeaders = getCorsHeaders(context.request);
+
   try {
     const body = await context.request.json() as {
       name: string;
@@ -26,7 +58,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     if (!body.name?.trim() || !body.phone?.trim() || !body.message?.trim()) {
       return new Response(
         JSON.stringify({ error: '姓名、电话和留言内容为必填项' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
+        { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
       );
     }
 
@@ -44,7 +76,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     if (isRateLimited) {
       return new Response(
         JSON.stringify({ error: '请勿重复提交，60秒后再试' }),
-        { status: 429, headers: { 'Content-Type': 'application/json' } }
+        { status: 429, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
       );
     }
 
@@ -68,7 +100,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         : '该邮箱提交过于频繁，请5分钟后再试';
       return new Response(
         JSON.stringify({ error: message }),
-        { status: 429, headers: { 'Content-Type': 'application/json' } }
+        { status: 429, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
       );
     }
     
@@ -154,13 +186,13 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     //成功or失败弹窗通知
     return new Response(
       JSON.stringify({ success: true, message: '留言提交成功，已收到通知' }),
-      { status: 200, headers: { 'Content-Type': 'application/json' } }
+      { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
     );
   } catch (error) {
     console.error('处理失败:', error);
     return new Response(
       JSON.stringify({ error: '服务器错误，请稍后重试' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
+      { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
     );
   }
 };

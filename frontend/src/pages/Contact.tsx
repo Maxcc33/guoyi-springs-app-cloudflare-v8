@@ -31,7 +31,8 @@ export default function Contact() {
     setIsSubmitting(true);  // 开始提交，禁用按钮
 
     try {
-      const response = await fetch('/api/messages', {
+      const apiBase = import.meta.env.VITE_API_BASE_URL || '';
+      const response = await fetch(`${apiBase}/api/messages`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
