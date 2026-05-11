@@ -10,29 +10,46 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '@/components/LanguageContext';
 
-export default function Index() {
-  const { t } = useLanguage();
-  const [currentSlide, setCurrentSlide] = useState(0);
+interface Banner {
+  id: number;
+  title_zh: string;
+  title_en: string;
+  subtitle_zh: string;
+  subtitle_en: string;
+  image: string;
+  link: string;
+}
 
-  const heroSlides = [
-    {
-      image: 'https://mgx-backend-cdn.metadl.com/generate/images/950291/2026-02-03/224a81c4-ddf2-43ac-9b4a-85b5904ae1a5.png',
-      title: t('20年专业制造经验', '20 Years of Professional Manufacturing'),
-      subtitle: t('值得信赖的不锈钢弹簧供应商', 'Trusted Stainless Steel Spring Supplier'),
-    },
-    {
-      image: 'https://mgx-backend-cdn.metadl.com/generate/images/950291/2026-02-03/b311dc80-f618-4905-b8e2-236af21b0f0f.png',
-      title: t('304/316不锈钢材质', '304/316 Stainless Steel Material'),
-      subtitle: t('高品质材料 确保产品耐用性', 'High-Quality Materials Ensure Durability'),
-    },
-    {
-      image: 'https://mgx-backend-cdn.metadl.com/generate/images/950291/2026-02-03/6016bdc6-9c54-4eb6-9e75-f7e96c1cc3d2.png',
-      title: t('先进生产设备', 'Advanced Production Equipment'),
-      subtitle: t('精密制造 品质保证', 'Precision Manufacturing, Quality Assurance'),
-    },
-  ];
+interface HomeProduct {
+  id: number;
+  name_zh: string;
+  name_en: string;
+  description_zh: string;
+  description_en: string;
+  specs_zh: string;
+  image: string;
+}
+
+export default function Index() {
+  const { language, t } = useLanguage();
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [heroSlides, setHeroSlides] = useState<Banner[]>([]);
+  const [homeProducts, setHomeProducts] = useState<HomeProduct[]>([]);
 
   useEffect(() => {
+    const apiBase = import.meta.env.VITE_API_BASE_URL || '';
+    fetch(`${apiBase}/api/cms/banners`)
+      .then(r => r.json())
+      .then(data => setHeroSlides(data.list || []))
+      .catch(console.error);
+    fetch(`${apiBase}/api/cms/products`)
+      .then(r => r.json())
+      .then(data => setHomeProducts((data.list || []).slice(0, 4)))
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    if (heroSlides.length === 0) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     }, 5000);
@@ -101,70 +118,86 @@ export default function Index() {
   return (
     <div className="min-h-screen">
       {/* Hero Carousel */}
-      <section className="relative h-[600px] overflow-hidden">
-        {heroSlides.map((slide, index) => (
-          <div
-            key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentSlide ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${slide.image})` }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40" />
+      <section className="relative h-[600px] overflow-hidden bg-industrial-dark">
+        {heroSlides.length === 0 ? (
+          <div className="absolute inset-0 bg-gradient-to-r from-industrial-blue to-accent flex items-center justify-center">
+            <div className="container mx-auto px-4">
+              <div className="max-w-2xl text-white">
+                <h1 className="text-5xl md:text-6xl font-bold mb-4">{t('国益弹簧', 'Guoyi Springs')}</h1>
+                <p className="text-xl md:text-2xl mb-8 text-gray-200">{t('专业不锈钢弹簧制造商', 'Professional Stainless Steel Spring Manufacturer')}</p>
+              </div>
             </div>
-            <div className="relative h-full flex items-center">
-              <div className="container mx-auto px-4">
-                <div className="max-w-2xl text-white animate-fade-in">
-                  <h1 className="text-5xl md:text-6xl font-bold mb-4">{slide.title}</h1>
-                  <p className="text-xl md:text-2xl mb-8 text-gray-200">{slide.subtitle}</p>
-                  <div className="flex flex-wrap gap-4">
-                    <Link to="/contact">
-                      <Button size="lg" className="bg-primary hover:bg-primary-hover text-white">
-                        {t('立即咨询', 'Contact Now')}
-                        <ArrowRight className="ml-2 w-5 h-5" />
-                      </Button>
-                    </Link>
-                    <Link to="/products">
-                      <Button size="lg" variant="outline" className="!bg-white/10 !text-white border-white hover:!bg-white/20">
-                        {t('查看产品', 'View Products')}
-                      </Button>
-                    </Link>
+          </div>
+        ) : (
+          heroSlides.map((slide, index) => (
+            <div
+              key={slide.id}
+              className={`absolute inset-0 transition-opacity duration-1000 ${
+                index === currentSlide ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <div
+                className="absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: `url(${slide.image})` }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40" />
+              </div>
+              <div className="relative h-full flex items-center">
+                <div className="container mx-auto px-4">
+                  <div className="max-w-2xl text-white animate-fade-in">
+                    <h1 className="text-5xl md:text-6xl font-bold mb-4">
+                      {language === 'zh' ? slide.title_zh : (slide.title_en || slide.title_zh)}
+                    </h1>
+                    <p className="text-xl md:text-2xl mb-8 text-gray-200">
+                      {language === 'zh' ? slide.subtitle_zh : (slide.subtitle_en || slide.subtitle_zh)}
+                    </p>
+                    <div className="flex flex-wrap gap-4">
+                      <Link to={slide.link || '/contact'}>
+                        <Button size="lg" className="bg-primary hover:bg-primary-hover text-white">
+                          {t('立即咨询', 'Contact Now')}
+                          <ArrowRight className="ml-2 w-5 h-5" />
+                        </Button>
+                      </Link>
+                      <Link to="/products">
+                        <Button size="lg" variant="outline" className="!bg-white/10 !text-white border-white hover:!bg-white/20">
+                          {t('查看产品', 'View Products')}
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
 
-        {/* Carousel Controls */}
-        <button
-          onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition-all"
-        >
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-        <button
-          onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition-all"
-        >
-          <ChevronRight className="w-6 h-6" />
-        </button>
-
-        {/* Dots */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-2">
-          {heroSlides.map((_, index) => (
+        {heroSlides.length > 1 && (
+          <>
             <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all ${
-                index === currentSlide ? 'bg-white w-8' : 'bg-white/50'
-              }`}
-            />
-          ))}
-        </div>
+              onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition-all"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button
+              onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition-all"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-2">
+              {heroSlides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-3 h-3 rounded-full transition-all ${
+                    index === currentSlide ? 'bg-white w-8' : 'bg-white/50'
+                  }`}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </section>
 
       {/* Features Section */}
@@ -211,29 +244,33 @@ export default function Index() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.map((product, index) => (
-              <Card
-                key={index}
-                className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-none"
-              >
-                <div className="aspect-square overflow-hidden bg-gray-100">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold text-industrial-dark mb-2">{product.name}</h3>
-                  <p className="text-sm text-secondary mb-4">{product.specs}</p>
-                  <Link to="/products">
-                    <Button variant="outline" className="w-full">
-                      {t('查看详情', 'View Details')}
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            ))}
+            {homeProducts.map((product) => {
+              const name = language === 'zh' ? product.name_zh : (product.name_en || product.name_zh);
+              let specsArr: string[] = [];
+              try { specsArr = JSON.parse(product.specs_zh); } catch { specsArr = []; }
+              const specs = specsArr.slice(0, 2).join(' | ');
+              return (
+                <Card
+                  key={product.id}
+                  className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-none"
+                >
+                  <div className="aspect-square overflow-hidden bg-gray-100">
+                    {product.image ? (
+                      <img src={product.image} alt={name} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300" />
+                    )}
+                  </div>
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-semibold text-industrial-dark mb-2">{name}</h3>
+                    <p className="text-sm text-secondary mb-4">{specs}</p>
+                    <Link to="/products">
+                      <Button variant="outline" className="w-full">{t('查看详情', 'View Details')}</Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
 
           <div className="text-center mt-10">
