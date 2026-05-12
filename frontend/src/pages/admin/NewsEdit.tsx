@@ -10,9 +10,16 @@ import { Switch } from '@/components/ui/switch';
 import { ArrowLeft, Save, AlertCircle } from 'lucide-react';
 import ImageUpload from '@/components/admin/ImageUpload';
 
+// 固定的3个分类（不允许手动输入）
+const NEWS_CATEGORIES = [
+  { zh: '技术文章', en: 'Technical Article' },
+  { zh: '公司动态', en: 'Company News' },
+  { zh: '客户案例', en: 'Customer Case' },
+];
+
 const emptyForm = {
   title_zh: '', title_en: '',
-  category_zh: '', category_en: '',
+  category_zh: '技术文章', category_en: 'Technical Article',
   summary_zh: '', summary_en: '',
   content_zh: '', content_en: '',
   image: '',
@@ -125,15 +132,24 @@ export default function NewsEdit() {
                 <Input value={form.title_en} onChange={e => set('title_en', e.target.value)} placeholder="English title (optional)" />
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>中文分类</Label>
-                <Input value={form.category_zh} onChange={e => set('category_zh', e.target.value)} placeholder="如：公司新闻、行业资讯" />
-              </div>
-              <div className="space-y-2">
-                <Label>英文分类</Label>
-                <Input value={form.category_en} onChange={e => set('category_en', e.target.value)} placeholder="e.g. Company News" />
-              </div>
+            <div className="space-y-2">
+              <Label>文章分类 *</Label>
+              <select
+                value={form.category_zh}
+                onChange={e => {
+                  const cat = NEWS_CATEGORIES.find(c => c.zh === e.target.value);
+                  if (cat) {
+                    set('category_zh', cat.zh);
+                    set('category_en', cat.en);
+                  }
+                }}
+                className="w-full md:w-64 h-10 px-3 rounded-md border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              >
+                {NEWS_CATEGORIES.map(cat => (
+                  <option key={cat.zh} value={cat.zh}>{cat.zh} / {cat.en}</option>
+                ))}
+              </select>
+              <p className="text-xs text-secondary">当前英文分类：{form.category_en}</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">

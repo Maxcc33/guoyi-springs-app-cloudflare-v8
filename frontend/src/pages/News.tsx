@@ -17,19 +17,33 @@ interface NewsItem {
   created_at: string;
 }
 
+// 固定的3个分类，按展示顺序排列
+const CATEGORIES = [
+  { zh: '全部', en: 'All', value: 'all' },
+  { zh: '技术文章', en: 'Technical Article', value: '技术文章' },
+  { zh: '公司动态', en: 'Company News', value: '公司动态' },
+  { zh: '客户案例', en: 'Customer Case', value: '客户案例' },
+];
+
 export default function News() {
   const { language, t } = useLanguage();
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState('all');
 
   useEffect(() => {
     const apiBase = import.meta.env.VITE_API_BASE_URL || '';
-    fetch(`${apiBase}/api/cms/news?limit=50`)
+    fetch(`${apiBase}/api/cms/news?limit=100`)
       .then(r => r.json())
       .then(data => setNewsList(data.list || []))
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
+
+  // 按分类筛选
+  const filteredNews = activeCategory === 'all'
+    ? newsList
+    : newsList.filter(n => n.category_zh === activeCategory);
 
   return (
     <div className="min-h-screen pt-20">
@@ -51,27 +65,68 @@ export default function News() {
         </div>
       </section>
 
+      {/* Category Tabs */}
+      <section className="bg-white border-b border-gray-200 sticky top-20 z-10 shadow-sm">
+        <div className="container mx-auto px-4">
+          <div className="flex gap-0 overflow-x-auto">
+            {CATEGORIES.map(cat => {
+              const label = language === 'zh' ? cat.zh : cat.en;
+              const isActive = activeCategory === cat.value;
+              return (
+                <button
+                  key={cat.value}
+                  onClick={() => setActiveCategory(cat.value)}
+                  className={`px-6 py-4 text-sm font-medium whitespace-nowrap border-b-2 transition-all duration-200 ${
+                    isActive
+                      ? 'border-primary text-primary'
+                      : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
+                  }`}
+                >
+                  {label}
+                  {cat.value !== 'all' && (
+                    <span className={`ml-2 text-xs px-1.5 py-0.5 rounded-full ${
+                      isActive ? 'bg-primary/10 text-primary' : 'bg-gray-100 text-gray-400'
+                    }`}>
+                      {newsList.filter(n => n.category_zh === cat.value).length}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* News List */}
-      <section className="py-20">
+      <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           {loading ? (
             <div className="flex justify-center py-20">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
             </div>
-          ) : newsList.length === 0 ? (
-            <p className="text-center text-secondary py-20">{t('暂无新闻', 'No news yet')}</p>
+          ) : filteredNews.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-secondary text-lg">{t('该分类暂无文章', 'No articles in this category')}</p>
+            </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {newsList.map((news) => {
+              {filteredNews.map((news) => {
                 const title = language === 'zh' ? news.title_zh : (news.title_en || news.title_zh);
                 const category = language === 'zh' ? news.category_zh : (news.category_en || news.category_zh);
                 const summary = language === 'zh' ? news.summary_zh : (news.summary_en || news.summary_zh);
                 const date = news.created_at?.slice(0, 10) || '';
 
+                // 分类对应颜色
+                const categoryColor =
+                  news.category_zh === '技术文章' ? 'bg-blue-100 text-blue-700' :
+                  news.category_zh === '公司动态' ? 'bg-green-100 text-green-700' :
+                  news.category_zh === '客户案例' ? 'bg-orange-100 text-orange-700' :
+                  'bg-gray-100 text-gray-600';
+
                 return (
                   <Card
                     key={news.id}
-                    className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-none group"
+                    className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-none group bg-white"
                   >
                     <Link to={`/news/${news.id}`}>
                       <div className="aspect-video overflow-hidden bg-gray-100">
@@ -90,7 +145,9 @@ export default function News() {
                     </Link>
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between mb-3">
-                        <Badge variant="secondary">{category}</Badge>
+                        <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${categoryColor}`}>
+                          {category}
+                        </span>
                         <div className="flex items-center text-sm text-secondary">
                           <Calendar className="w-4 h-4 mr-1" />
                           {date}
